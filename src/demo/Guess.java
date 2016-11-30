@@ -19,12 +19,21 @@ public class Guess {
     // store user attempts based on user nric
     private Map<String, Integer> userList;
 
+    private int day;// reset the day
+
     public static Guess getInstance() {
         return ourInstance;
     }
 
-    // constructor to initialize the random number, and the userList
+    // After a user has guess it correctly, a new lucky number is generated, and all user attempts are reset to 0.
     private Guess() {
+        if (userList == null) {
+            reset();
+        }
+        day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);//check day of the month
+    }
+    // constructor to initialize the random number, and the userList
+    private void reset() {
         if (userList == null) {
             luckyNumber = random.nextInt(100);
             userList = new HashMap<String, Integer>();
@@ -67,9 +76,20 @@ public class Guess {
         } else if (i<luckyNumber) {
             return -1;
         } else {
-
+            reset();//  reset to 0
             return 0;
         }
     }
-
+    // check whether it's on the same day
+    private boolean isSameDay() {
+        Calendar cal = Calendar.getInstance();
+        int current = cal.get(Calendar.DAY_OF_MONTH);
+        if (current != day) {
+            day = current;
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
+
